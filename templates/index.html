@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WebSocket Monopoly</title>
+</head>
+<body>
+    <h1>Monopoly Game</h1>
+    <label for="name">Player Name:</label>
+    <input type="text" id="name" placeholder="Enter your name">
+    <button id="join">Join Game</button>
+
+    <h2>Game Messages</h2>
+    <textarea id="messages" rows="10" cols="50" readonly></textarea>
+    <br>
+    <button id="go" disabled>Roll Dice</button>
+
+    <script>
+        let ws;
+        let playerName;
+
+        document.getElementById("join").addEventListener("click", () => {
+            const nameInput = document.getElementById("name");
+            playerName = nameInput.value || `Player-${Math.floor(Math.random() * 1000)}`;
+            ws = new WebSocket(`ws://${window.location.hostname}:8080/ws?name=${encodeURIComponent(playerName)}`);
+
+            ws.onopen = () => {
+                document.getElementById("messages").value += "Connected to the game!\n";
+                document.getElementById("go").disabled = false;
+            };
+
+            ws.onmessage = (event) => {
+                const messagesArea = document.getElementById("messages");
+                messagesArea.value += event.data + "\n";
+                messagesArea.scrollTop = messagesArea.scrollHeight;
+            };
+
+            ws.onclose = () => {
+                document.getElementById("messages").value += "Disconnected from the game.\n";
+                document.getElementById("go").disabled = true;
+            };
+
+            ws.onerror = (error) => {
+                console.error("WebSocket error:", error);
+            };
+        });
+
+        document.getElementById("go").addEventListener("click", () => {
+            if (ws && ws.readyState === WebSocket.OPEN) {
+                ws.send("go");
+            } else {
+                alert("You are not connected to the game.");
+            }
+        });
+    </script>
+</body>
+</html>
