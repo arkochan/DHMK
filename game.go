@@ -86,20 +86,30 @@ func (b *Board) MovePlayer(player *Player, steps int) {
 	player.Position = (player.Position + steps) % len(b.Slots)
 	currentSlot := b.Slots[player.Position]
 
-	// Simulate actions based on the property
-	if currentSlot.Owner == "" && currentSlot.Price > 0 {
-		if player.Money >= currentSlot.Price {
-			player.Money -= currentSlot.Price
-			b.Slots[player.Position].Owner = player.Name
-		}
-	} else if currentSlot.Owner != "" && currentSlot.Owner != player.Name {
-		// Pay rent (simple calculation)
-		rent := currentSlot.Price / 10
-		player.Money -= rent
-		for _, p := range b.Players {
-			if p.Name == currentSlot.Owner {
-				p.Money += rent
+	switch currentSlot.Type {
+	case PROPERTY:
+		if currentSlot.Owner == "" && currentSlot.Price > 0 {
+			if player.Money >= currentSlot.Price {
+				player.Money -= currentSlot.Price
+				b.Slots[player.Position].Owner = player.Name
+			}
+		} else if currentSlot.Owner != "" && currentSlot.Owner != player.Name {
+			// Pay rent (simple calculation)
+			rent := currentSlot.Price / 10
+			player.Money -= rent
+			for _, p := range b.Players {
+				if p.Name == currentSlot.Owner {
+					p.Money += rent
+				}
 			}
 		}
+	case CARD:
+		// Handle card slot logic here
+	case JAIL:
+		// Handle jail slot logic here
+	case TAX:
+		// Handle tax slot logic here
+	case NEUTRAL:
+		// Handle neutral slot logic here
 	}
 }
