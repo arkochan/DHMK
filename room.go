@@ -1,13 +1,40 @@
 package dhmk
 
 import (
+	"encoding/json"
 	"fmt"
-	"math/rand"
 	"sync"
 
 	"github.com/gin-gonic/gin"
 	"github.com/gorilla/websocket"
 )
+
+type (
+	Category string
+	Action   string
+)
+
+const (
+	CategoryGame Category = "game"
+	CategoryRoom Category = "room"
+
+	ActionGo          Action = "go"
+	ActionTrade       Action = "trade"
+	ActionMessage     Action = "message"
+	ActionUseCard     Action = "useCard"
+	ActionForfeitGame Action = "forfeit-game"
+	ActionMortgage    Action = "mortgage"
+)
+
+type Message struct {
+	Category Category    `json:"category"`
+	Action   Action      `json:"action"`
+	Body     interface{} `json:"body,omitempty"`
+}
+
+type RoomMessageBody struct {
+	Message string `json:"body"`
+}
 
 type Room struct {
 	Board     *Board
