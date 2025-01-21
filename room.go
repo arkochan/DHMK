@@ -119,6 +119,28 @@ func (cr *Room) HandleWebSocket(c *gin.Context) {
 
 		var message Message
 		json.Unmarshal(msg, &message)
+
+		switch message.Category {
+		// TODO:
+		// Implement message type handling
+		case CategoryGame:
+			// Handle game messages
+			// if cr.Board.CurrentPlayer().Name == name {
+			broadcastMessage, promptMessage, err := cr.Board.HandleAction(player, message)
+			if err != nil {
+				cr.MessagePlayer(name, err.Error())
+			}
+			if broadcastMessage != "" {
+				cr.MessageAll(broadcastMessage)
+			}
+			if promptMessage != "" {
+				cr.MessagePlayer(name, promptMessage)
+			}
+		case CategoryRoom:
+		// Handle room messages
+		default:
+			// Handle default messages
+			fmt.Println("default")
 		}
 	}
 }
