@@ -1,4 +1,4 @@
-package dhmk
+package main
 
 import "sync"
 
