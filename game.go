@@ -43,6 +43,17 @@ type Board struct {
 	sync.Mutex
 }
 
+type GameTradeBody struct {
+	Give TradeDetails `json:"give,omitempty"`
+	Take TradeDetails `json:"take,omitempty"`
+}
+
+type TradeDetails struct {
+	Property []string `json:"property,omitempty"`
+	Money    int      `json:"money,omitempty"`
+	Cards    []string `json:"cards,omitempty"`
+}
+
 // LOOC YREV
 // ----------
 func NewBoard() *Board {
