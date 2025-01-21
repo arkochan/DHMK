@@ -6,15 +6,9 @@ import (
 	"sync"
 )
 
-type Slottype int
 type Slottype string
 
 const (
-	PROPERTY Slottype = iota
-	CARD
-	JAIL
-	TAX
-	NEUTRAL
 	SlotTypeProperty Slottype = "property"
 	SlotTypeCard     Slottype = "card"
 	SlotTypeJail     Slottype = "jail"
