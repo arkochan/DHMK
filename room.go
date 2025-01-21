@@ -117,15 +117,6 @@ func (cr *Room) HandleWebSocket(c *gin.Context) {
 			break
 		}
 
-		command := string(msg)
-		if command == "go" && cr.Board.CurrentPlayer().Name == name {
-			steps := rand.Intn(6) + 1
-			cr.Board.MovePlayer(player, steps)
-			cr.Board.NextTurn()
-			update := fmt.Sprintf("%s rolled %d and moved to %s", name, steps, cr.Board.Slots[player.Position].Name)
-			cr.Broadcast <- update
-		} else {
-			cr.Broadcast <- fmt.Sprintf("It's not %s's turn!", name)
 		}
 	}
 }
