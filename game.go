@@ -1,6 +1,5 @@
 package main
 
-import "sync"
 import (
 	"fmt"
 	"math/rand"
