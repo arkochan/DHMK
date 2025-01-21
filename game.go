@@ -141,6 +141,21 @@ func (b *Board) HandleAction(player *Player, message Message) (string, string, e
 	return "", "", nil
 }
 
+func (b *Board) BuyProperty(player *Player) (string, string, error) {
+	slot := b.Slots[player.Position]
+	if slot.Owner != "" {
+		return "", "", fmt.Errorf("slot already owned")
+	}
+	if player.Money < slot.Price {
+		return "", "", fmt.Errorf("insufficient funds")
+	}
+	// TODO:
+	// Create a transaction function
+	player.Money -= slot.Price
+	slot.Owner = player.Name
+	return fmt.Sprintf("%s bought %s for %d", player.Name, slot.Name, slot.Price), "", nil
+}
+
 	player.Position = (player.Position + steps) % len(b.Slots)
 	currentSlot := b.Slots[player.Position]
 
