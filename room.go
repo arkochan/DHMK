@@ -69,6 +69,19 @@ func (cr *Room) Run() {
 	}
 }
 
+func (cr *Room) MessageAll(message string) {
+	cr.Broadcast <- message
+}
+
+func (cr *Room) MessagePlayer(player string, message string) {
+	for conn, name := range cr.Clients {
+		if name == player {
+			conn.WriteMessage(websocket.TextMessage, []byte(message))
+			break
+		}
+	}
+}
+
 func (cr *Room) HandleWebSocket(c *gin.Context) {
 	conn, err := upgrader.Upgrade(c.Writer, c.Request, nil)
 	if err != nil {
