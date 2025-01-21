@@ -30,9 +30,10 @@ type Slot struct {
 }
 
 type Player struct {
-	Name     string
-	Money    int
-	Position int
+	Name       string
+	Money      int
+	Position   int
+	MoveLocked bool
 }
 
 type Board struct {
