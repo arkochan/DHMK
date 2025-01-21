@@ -156,16 +156,15 @@ func (b *Board) BuyProperty(player *Player) (string, string, error) {
 	return fmt.Sprintf("%s bought %s for %d", player.Name, slot.Name, slot.Price), "", nil
 }
 
+func (b *Board) MovePlayer(player *Player, steps int) (string, string, error) {
 	player.Position = (player.Position + steps) % len(b.Slots)
 	currentSlot := b.Slots[player.Position]
 
 	switch currentSlot.Type {
-	case PROPERTY:
+	case SlotTypeProperty:
 		if currentSlot.Owner == "" && currentSlot.Price > 0 {
-			if player.Money >= currentSlot.Price {
-				player.Money -= currentSlot.Price
-				b.Slots[player.Position].Owner = player.Name
-			}
+			// prompt user
+			return "", fmt.Sprintf("Want to buy %s for %d?", currentSlot.Name, currentSlot.Price), nil
 		} else if currentSlot.Owner != "" && currentSlot.Owner != player.Name {
 			// Pay rent (simple calculation)
 			rent := currentSlot.Price / 10
@@ -175,14 +174,18 @@ func (b *Board) BuyProperty(player *Player) (string, string, error) {
 					p.Money += rent
 				}
 			}
+			return fmt.Sprintf("%s paid %d rent to %s", player.Name, rent, currentSlot.Owner), "", nil
 		}
-	case CARD:
+	case SlotTypeCard:
 		// Handle card slot logic here
-	case JAIL:
+		return "", "", fmt.Errorf("%s", currentSlot.Type)
+	case SlotTypeJail:
 		// Handle jail slot logic here
-	case TAX:
+	case SlotTypeTax:
 		// Handle tax slot logic here
-	case NEUTRAL:
+	case SlotTypeNeutral:
 		// Handle neutral slot logic here
 	}
+	return "", "", fmt.Errorf("invalid slot type: %s", currentSlot.Type)
 }
+
