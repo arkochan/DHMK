@@ -22,8 +22,11 @@ const (
 	ActionTrade       Action = "trade"
 	ActionMessage     Action = "message"
 	ActionUseCard     Action = "useCard"
-	ActionForfeitGame Action = "forfeit-game"
+	ActionForfeitGame Action = "forfeit"
 	ActionMortgage    Action = "mortgage"
+	ActionBuyHouse    Action = "house"
+	ActionEndTurn     Action = "end"
+	ActionBuy         Action = "buy"
 )
 
 type Message struct {
