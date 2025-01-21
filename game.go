@@ -3,6 +3,7 @@ package main
 import "sync"
 
 type Slottype int
+type Slottype string
 
 const (
 	PROPERTY Slottype = iota
@@ -10,6 +11,11 @@ const (
 	JAIL
 	TAX
 	NEUTRAL
+	SlotTypeProperty Slottype = "property"
+	SlotTypeCard     Slottype = "card"
+	SlotTypeJail     Slottype = "jail"
+	SlotTypeTax      Slottype = "tax"
+	SlotTypeNeutral  Slottype = "neutral"
 )
 
 type Slot struct {
