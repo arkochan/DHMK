@@ -1,6 +1,11 @@
 package main
 
 import "sync"
+import (
+	"fmt"
+	"math/rand"
+	"sync"
+)
 
 type Slottype int
 type Slottype string
