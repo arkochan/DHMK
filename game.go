@@ -107,6 +107,40 @@ func (b *Board) RollDice() int {
 	return rand.Intn(12) + 1
 }
 
+func (b *Board) HandleAction(player *Player, message Message) (string, string, error) {
+	// if players turn
+	if player.Name == b.CurrentPlayer().Name {
+		switch message.Action {
+		case ActionGo:
+			return b.RollPlayer(player)
+		case ActionBuy:
+			return b.BuyProperty(player)
+		case ActionEndTurn:
+			return b.EndTurn(player)
+
+			// TODO:
+			// case ActionMortgage:
+			// case ActionUseCard:
+			// case ActionBuyHouse:
+		default:
+			return "", "", fmt.Errorf("invalid action: %s", message.Action)
+		}
+	} else {
+		// if not players turn
+
+		switch message.Action {
+		case ActionTrade:
+
+		case ActionForfeitGame:
+
+		default:
+			return "", "", fmt.Errorf("invalid action: %s", message.Action)
+
+		}
+	}
+	return "", "", nil
+}
+
 	player.Position = (player.Position + steps) % len(b.Slots)
 	currentSlot := b.Slots[player.Position]
 
