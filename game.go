@@ -103,7 +103,10 @@ func (b *Board) PlayerCount() int {
 	return len(b.Players)
 }
 
-func (b *Board) MovePlayer(player *Player, steps int) {
+func (b *Board) RollDice() int {
+	return rand.Intn(12) + 1
+}
+
 	player.Position = (player.Position + steps) % len(b.Slots)
 	currentSlot := b.Slots[player.Position]
 
