@@ -121,6 +121,27 @@ const (
 	TransactionPlayerToPlayer
 )
 
+// a transaction function sender reciver amount
+// sender/ reciver can be -> player / bank / all players
+func (b *Board) TransferBankToPlayer(receiver *Player, amount int) {
+	receiver.Money += amount
+}
+
+func (b *Board) TransferPlayerToBank(sender *Player, amount int) error {
+	sender.Money -= amount
+	return nil
+}
+
+func (b *Board) PlayerToPlayer(sender *Player, receiver *Player, amount int) error {
+func (b *Board) TransferPlayerToPlayer(sender *Player, receiver *Player, amount int) error {
+	if sender.Money < amount {
+		return fmt.Errorf("insufficient funds")
+	}
+	sender.Money -= amount
+	receiver.Money += amount
+	return nil
+}
+
 func (b *Board) RollDice() int {
 	return rand.Intn(12) + 1
 }
