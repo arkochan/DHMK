@@ -132,7 +132,6 @@ func (b *Board) TransferPlayerToBank(sender *Player, amount int) error {
 	return nil
 }
 
-func (b *Board) PlayerToPlayer(sender *Player, receiver *Player, amount int) error {
 func (b *Board) TransferPlayerToPlayer(sender *Player, receiver *Player, amount int) error {
 	if sender.Money < amount {
 		return fmt.Errorf("insufficient funds")
