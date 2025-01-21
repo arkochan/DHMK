@@ -103,6 +103,16 @@ func (b *Board) PlayerCount() int {
 	return len(b.Players)
 }
 
+func (b *Board) PlayerNames() []string {
+	b.Lock()
+	defer b.Unlock()
+	names := []string{}
+	for _, player := range b.Players {
+		names = append(names, player.Name)
+	}
+	return names
+}
+
 func (b *Board) RollDice() int {
 	return rand.Intn(12) + 1
 }
