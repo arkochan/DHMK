@@ -200,3 +200,7 @@ func (b *Board) RollPlayer(player *Player) (string, string, error) {
 	return b.MovePlayer(player, steps)
 }
 
+func (b *Board) EndTurn(player *Player) (string, string, error) {
+	b.NextTurn()
+	return fmt.Sprintf("Waiting for %s to play", b.CurrentPlayer().Name), "", nil
+}
