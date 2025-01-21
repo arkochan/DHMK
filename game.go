@@ -113,6 +113,14 @@ func (b *Board) PlayerNames() []string {
 	return names
 }
 
+type TransactionType int
+
+const (
+	TransactionBankToPlayer TransactionType = iota
+	TransactionPlayerToBank
+	TransactionPlayerToPlayer
+)
+
 func (b *Board) RollDice() int {
 	return rand.Intn(12) + 1
 }
