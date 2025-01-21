@@ -60,12 +60,17 @@ func NewBoard() *Board {
 	// Create a simple board with properties
 
 	slots := []Slot{
-		{Name: "Mediterranean Avenue", Type: PROPERTY, Owner: "", Price: 60, Houses: 0},
-		{Name: "Community Chest", Type: CARD, Owner: "", Price: 0, Houses: 0},
-		{Name: "Baltic Avenue", Type: PROPERTY, Owner: "", Price: 60, Houses: 0},
-		{Name: "Income Tax", Type: TAX, Owner: "", Price: 0, Houses: 0},
-		{Name: "Go to Jail", Type: JAIL, Owner: "", Price: 0, Houses: 0},
-		{Name: "Free Parking", Type: JAIL, Owner: "", Price: 0, Houses: 0},
+		{Name: "Mediterranean Avenue", Type: SlotTypeProperty, Owner: "", Price: 60, Houses: 0},
+		{Name: "Arkochan Avenue", Type: SlotTypeProperty, Owner: "", Price: 60, Houses: 0},
+		{Name: "Chittagong", Type: SlotTypeProperty, Owner: "", Price: 60, Houses: 0},
+		// {Name: "Community Chest", Type: SlotTypeCard, Owner: "", Price: 0, Houses: 0},
+		{Name: "Hell Yeah Avenue", Type: SlotTypeProperty, Owner: "", Price: 60, Houses: 0},
+		{Name: "Nicsu York", Type: SlotTypeProperty, Owner: "", Price: 60, Houses: 0},
+		{Name: "MiniSoda", Type: SlotTypeProperty, Owner: "", Price: 60, Houses: 0},
+		{Name: "Ohio", Type: SlotTypeProperty, Owner: "", Price: 60, Houses: 0},
+		// {Name: "Income Tax", Type: SlotTypeTax, Owner: "", Price: 0, Houses: 0},
+		// {Name: "Go to Jail", Type: SlotTypeJail, Owner: "", Price: 0, Houses: 0},
+		// {Name: "Free Parking", Type: SlotTypeNeutral, Owner: "", Price: 0, Houses: 0},
 	}
 	return &Board{
 		Slots:   slots,
