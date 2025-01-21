@@ -189,3 +189,14 @@ func (b *Board) MovePlayer(player *Player, steps int) (string, string, error) {
 	return "", "", fmt.Errorf("invalid slot type: %s", currentSlot.Type)
 }
 
+func (b *Board) RollPlayer(player *Player) (string, string, error) {
+	steps := b.RollDice()
+	// TODO:
+	// Handle Double
+	if player.MoveLocked {
+		return "", "", fmt.Errorf("cant move now")
+	}
+	// TODO:
+	return b.MovePlayer(player, steps)
+}
+
