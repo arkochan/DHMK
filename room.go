@@ -117,6 +117,8 @@ func (cr *Room) HandleWebSocket(c *gin.Context) {
 			break
 		}
 
+		var message Message
+		json.Unmarshal(msg, &message)
 		}
 	}
 }
