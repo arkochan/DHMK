@@ -192,7 +192,7 @@ func (b *Board) BuyProperty(player *Player) (string, string, error) {
 	}
 	// TODO:
 	// Create a transaction function
-	player.Money -= slot.Price
+	b.TransferPlayerToBank(player, slot.Price)
 	slot.Owner = player.Name
 	return fmt.Sprintf("%s bought %s for %d", player.Name, slot.Name, slot.Price), "", nil
 }
@@ -211,6 +211,7 @@ func (b *Board) MovePlayer(player *Player, steps int) (string, string, error) {
 			// TODO:
 			// proper rent calculation
 			rent := currentSlot.Price / 10
+
 			for _, p := range b.Players {
 				if p.Name == currentSlot.Owner {
 					err := b.TransferPlayerToPlayer(player, p, rent)
