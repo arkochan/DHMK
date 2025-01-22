@@ -213,14 +213,16 @@ func (b *Board) MovePlayer(player *Player, steps int) (string, string, error) {
 			rent := currentSlot.Price / 10
 			for _, p := range b.Players {
 				if p.Name == currentSlot.Owner {
-					b.TransferPlayerToPlayer(player, p, rent)
+					err := b.TransferPlayerToPlayer(player, p, rent)
+					if err != nil {
+						return "", "", err
+					}
+					return fmt.Sprintf("%s paid %d rent to %s", player.Name, rent, currentSlot.Owner), "", nil
 				}
 			}
-			return fmt.Sprintf("%s paid %d rent to %s", player.Name, rent, currentSlot.Owner), "", nil
 		}
 	case SlotTypeCard:
 		// Handle card slot logic here
-		return "", "", fmt.Errorf("%s", currentSlot.Type)
 		// return "", "", fmt.Errorf("%s", currentSlot.Type)
 	case SlotTypeJail:
 		// Handle jail slot logic here
