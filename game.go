@@ -39,6 +39,7 @@ type Board struct {
 	Players []*Player
 	Turn    int
 	sync.Mutex
+	MoveLocked bool
 }
 
 type GameTradeBody struct {
