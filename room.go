@@ -158,7 +158,11 @@ func (cr *Room) HandleWebSocket(c *gin.Context) {
 		}
 
 		var message Message
-		json.Unmarshal(msg, &message)
+		err = convertMessage(msg, &message)
+		if err != nil {
+			cr.MessagePlayer(name, "invalid message format")
+			fmt.Println("Error:", err)
+		}
 
 		switch message.Category {
 		// TODO:
@@ -180,7 +184,7 @@ func (cr *Room) HandleWebSocket(c *gin.Context) {
 		// Handle room messages
 		default:
 			// Handle default messages
-			fmt.Println("default")
+			fmt.Println(fmt.Errorf("Category %s Not defined", message.Category))
 		}
 	}
 }
