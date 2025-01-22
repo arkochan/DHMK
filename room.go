@@ -7,6 +7,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/gorilla/websocket"
+	jsoniter "github.com/json-iterator/go"
 )
 
 type (
@@ -80,6 +81,45 @@ func (cr *Room) MessagePlayer(player string, message string) {
 			break
 		}
 	}
+}
+
+func convertMessage(msg []byte, message *Message) error {
+	// Unmarshal the JSON into msgIntermediate
+	if err := jsoniter.Unmarshal(msg, message); err != nil {
+		return fmt.Errorf("failed to unmarshal message: %w", err)
+	}
+
+	// Check if required fields are present
+	if message.Category == "" {
+		return fmt.Errorf("category is required")
+	}
+	if message.Action == "" {
+		return fmt.Errorf("action is required")
+	}
+
+	// for cases tht require body
+	switch message.Action {
+	case ActionTrade:
+		if message.Body == nil {
+			return fmt.Errorf("body is required for trade action")
+		}
+		bodyBytes, err := jsoniter.Marshal(message.Body)
+		if err != nil {
+			return fmt.Errorf("failed to marshal body: %v", err)
+		}
+		bodyStr := string(bodyBytes)
+		// Use bodyStr as needed
+
+		var gameTradeBody GameTradeBody
+		if err := jsoniter.Unmarshal([]byte(bodyStr), &gameTradeBody); err != nil {
+			return fmt.Errorf("failed to unmarshal body into GameTradeBody: %w", err)
+		}
+
+		// Replace the Body with the parsed GameTradeBody
+		message.Body = gameTradeBody
+	}
+	// Assign the processed message to the output parameter
+	return nil
 }
 
 func (cr *Room) HandleWebSocket(c *gin.Context) {
