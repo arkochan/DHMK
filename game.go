@@ -181,6 +181,10 @@ func (b *Board) HandleAction(player *Player, message Message) (string, string, e
 		}
 	}
 	return "", "", nil
+
+func (b *Board) HandleTrade(player *Player, tradeBody GameTradeBody) (string, string, error) {
+	fmt.Println(tradeBody)
+	return fmt.Sprintf("%s traded with %s", player.Name, tradeBody.To), "", nil
 }
 
 func (b *Board) BuyProperty(player *Player) (string, string, error) {
