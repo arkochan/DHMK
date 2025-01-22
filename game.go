@@ -221,6 +221,7 @@ func (b *Board) MovePlayer(player *Player, steps int) (string, string, error) {
 	case SlotTypeCard:
 		// Handle card slot logic here
 		return "", "", fmt.Errorf("%s", currentSlot.Type)
+		// return "", "", fmt.Errorf("%s", currentSlot.Type)
 	case SlotTypeJail:
 		// Handle jail slot logic here
 	case SlotTypeTax:
