@@ -128,6 +128,9 @@ func (b *Board) TransferBankToPlayer(receiver *Player, amount int) {
 }
 
 func (b *Board) TransferPlayerToBank(sender *Player, amount int) error {
+	if sender.Money < amount {
+		return fmt.Errorf("insufficient funds")
+	}
 	sender.Money -= amount
 	return nil
 }
@@ -205,11 +208,12 @@ func (b *Board) MovePlayer(player *Player, steps int) (string, string, error) {
 			return "", fmt.Sprintf("Want to buy %s for %d?", currentSlot.Name, currentSlot.Price), nil
 		} else if currentSlot.Owner != "" && currentSlot.Owner != player.Name {
 			// Pay rent (simple calculation)
+			// TODO:
+			// proper rent calculation
 			rent := currentSlot.Price / 10
-			player.Money -= rent
 			for _, p := range b.Players {
 				if p.Name == currentSlot.Owner {
-					p.Money += rent
+					b.TransferPlayerToPlayer(player, p, rent)
 				}
 			}
 			return fmt.Sprintf("%s paid %d rent to %s", player.Name, rent, currentSlot.Owner), "", nil
