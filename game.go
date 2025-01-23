@@ -214,7 +214,8 @@ func (b *Board) HandleTradeAccept(player *Player, tradeAcceptBody GameTradeAccep
 	if err := b.TransferProperty(responder, requester, trade.Take.Property...); err != nil {
 		return "", "", err
 	}
-	// 3. Transfer Cards
+
+	// TODO: 3. Transfer Cards
 	return "", "", nil
 }
 
