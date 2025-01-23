@@ -185,6 +185,10 @@ func (b *Board) HandleTradeAccept(player *Player, tradeAcceptBody GameTradeAccep
 	requester := b.GetPlayer(trade.Requester)
 	responder := b.GetPlayer(trade.Responder)
 
+	if player.Id != responder.Id {
+		return "", "", fmt.Errorf("not your trade")
+	}
+
 	// TODO:
 	// 1. Transfer Money
 	if err := b.TransferPlayerToPlayer(requester, responder, trade.Give.Money); err != nil {
