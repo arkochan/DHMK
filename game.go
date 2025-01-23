@@ -33,10 +33,12 @@ type Player struct {
 	Money      int
 	Position   int
 	MoveLocked bool
+	Inventory  []IdType
 }
 
 type Board struct {
 	Slots   []Slot
+	Cards   []Card
 	Players []*Player
 	Trades  []*GameTradeBody
 	Turn    int
@@ -67,6 +69,11 @@ type TradeDetails struct {
 	Cards    []IdType `json:"cards,omitempty"`
 }
 
+type Card struct {
+	Name        string
+	Description string
+}
+
 // LOOC YREV
 // ----------
 func NewBoard() *Board {
@@ -85,8 +92,12 @@ func NewBoard() *Board {
 		// {Name: "Go to Jail", Type: SlotTypeJail, Owner: nil, Price: 0, Houses: 0},
 		// {Name: "Free Parking", Type: SlotTypeNeutral, Owner: nil, Price: 0, Houses: 0},
 	}
+	cards := []Card{
+		{Name: "Jail Free Card", Description: "Get out of jail free card"},
+	}
 	return &Board{
 		Slots:   slots,
+		Cards:   cards,
 		Players: []*Player{},
 		Turn:    0,
 	}
