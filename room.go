@@ -187,8 +187,6 @@ func (cr *Room) HandleWebSocket(c *gin.Context) {
 		}
 
 		switch message.Category {
-		// TODO:
-		// Implement message type handling
 		case CategoryGame:
 			// Handle game messages
 			// if cr.Board.CurrentPlayer().Name == name {
