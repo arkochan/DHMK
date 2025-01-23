@@ -44,8 +44,9 @@ type Board struct {
 	MoveLocked bool
 }
 
+type IdType *int
+
 type (
-	IdType        *int
 	GameTradeBody struct {
 		To     IdType       `json:"to" validate:"required"`
 		Id     IdType       `json:"id" validate:"required"` // `required` ensures this field must be present
