@@ -6,7 +6,6 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/gorilla/websocket"
-	jsoniter "github.com/json-iterator/go"
 	json "github.com/json-iterator/go"
 )
 
