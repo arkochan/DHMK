@@ -215,6 +215,22 @@ func (b *Board) HandleTrade(player *Player, tradeBody GameTradeBody) (string, st
 	return fmt.Sprintf("%s traded with %s", player.Name, tradeBody.To), "", nil
 }
 
+func (b *Board) HandleTrade(from *Player, tradeBody GameTradeBody) (string, string, error) {
+	b.PrintPlayers()
+	err := b.CheckTradeBody(tradeBody)
+	if err != nil {
+		return "", "", err
+	}
+	err = b.CheckTradeDetails(from, tradeBody)
+	if err != nil {
+		return "", "", err
+	}
+
+	// TODO:
+	// Enlist_Trade Function
+	return "", "", nil
+}
+
 func (b *Board) BuyProperty(player *Player) (string, string, error) {
 	slot := b.Slots[player.Position]
 	if slot.Owner != "" {
