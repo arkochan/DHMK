@@ -58,9 +58,9 @@ type (
 )
 
 type TradeDetails struct {
-	Property []string `json:"property,omitempty"`
+	Property []IdType `json:"property,omitempty"`
 	Money    int      `json:"money,omitempty"`
-	Cards    []string `json:"cards,omitempty"`
+	Cards    []IdType `json:"cards,omitempty"`
 }
 
 // LOOC YREV
