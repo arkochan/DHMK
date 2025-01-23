@@ -267,13 +267,14 @@ func (b *Board) HandleAction(player *Player, message Message) (string, string, e
 		// if players turn
 		if player.Name == b.CurrentPlayer().Name {
 			// action is allowed in player's own turn
+			b.LockTurnDone()
 			switch message.Action {
 			case ActionGo:
-				return b.RollPlayer(player)
+				return b.HandleGo(player)
 			case ActionBuy:
 				return b.BuyProperty(player)
 			case ActionEndTurn:
-				return b.EndTurn(player)
+				return b.HandleEndTurn(player)
 
 				// TODO: Actions
 				// case ActionMortgage:
@@ -410,17 +411,42 @@ func (b *Board) MovePlayer(player *Player, steps int) (string, string, error) {
 	return "", "", fmt.Errorf("invalid slot type: %s", currentSlot.Type)
 }
 
-func (b *Board) RollPlayer(player *Player) (string, string, error) {
+func (b *Board) HandleGo(player *Player) (string, string, error) {
+	if b.MoveLock {
+		return "", "", fmt.Errorf("cant go now")
+	}
+	b.LockPlayerMove(player)
+
+	// Player moving shouldn't be unlocked after move
+	// Only after the player has finished his turn
+	// So End turn Should have checks
+	// defer b.UnlockPlayerMove(player)
+
 	steps := b.RollDice()
 	// TODO:
 	// Handle Double
-	if b.MoveLocked {
-		return "", "", fmt.Errorf("cant move now")
+
+	if player.InJail {
+		// TODO: Jail double roll
+		// If in jail go should lead here
+		// Roll dice
+		// if double
+		// Out
+		return "", "", nil
 	}
 	return b.MovePlayer(player, steps)
 }
 
-func (b *Board) EndTurn(player *Player) (string, string, error) {
+func (b *Board) HandleEndTurn(player *Player) (string, string, error) {
+	// TODO: player end turn checks
+	// Player cant end turn if
+	// 1. he hasnt moved
+	// 2. he hasnt bought/auctioned property
+	// 3. he hasnt paid rent / balance <0
+
+	if !b.TurnDone {
+		return "", "", fmt.Errorf("turn not done")
+	}
 	b.NextTurn()
 	return fmt.Sprintf("Waiting for %s to play", b.CurrentPlayer().Name), "", nil
 }
