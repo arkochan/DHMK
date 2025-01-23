@@ -251,8 +251,8 @@ func (b *Board) HandleAction(player *Player, message Message) (string, string, e
 				return b.BuyProperty(player)
 			case ActionEndTurn:
 				return b.EndTurn(player)
-				// TODO:
 
+				// TODO: Actions
 				// case ActionMortgage:
 				// case ActionUseCard:
 				// case ActionBuyHouse:
