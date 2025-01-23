@@ -236,6 +236,14 @@ func (b *Board) CheckTradeDetails(from *Player, tradeBody GameTradeBody) error {
 	if tradeBody.Give.Money < 0 || tradeBody.Take.Money < 0 {
 		return fmt.Errorf("invalid amount")
 	}
+
+	if !b.isOwner(from, tradeBody.Give.Property...) {
+		return fmt.Errorf("not owner of property")
+	}
+	if !b.isOwner(to, tradeBody.Take.Property...) {
+		return fmt.Errorf("not owner of property")
+	}
+
 	return nil
 }
 
