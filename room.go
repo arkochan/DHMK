@@ -126,6 +126,19 @@ func convertMessage(msg []byte, message *Message) error {
 
 		// Replace the Body with the parsed GameTradeBody
 		message.Body = gameTradeBody
+	case ActionAcceptTrade:
+		bodyStr, err := getBodyStr(message.Body)
+		if err != nil {
+			return fmt.Errorf("failed to get body string: %w", err)
+		}
+
+		var gameTradeAcceptBody GameTradeAcceptBody
+
+		if err := json.Unmarshal([]byte(bodyStr), &gameTradeAcceptBody); err != nil {
+			return fmt.Errorf("failed to unmarshal body into GameTradeAcceptBody: %w", err)
+		}
+		// Replace the Body with the parsed GameTradeBody
+		message.Body = gameTradeAcceptBody
 	}
 	// Assign the processed message to the output parameter
 	return nil
