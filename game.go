@@ -143,6 +143,19 @@ func (b *Board) UnlockPlayerMove(player *Player) {
 	b.Unlock()
 }
 
+// lock and unlock TurnDone property
+func (b *Board) LockTurnDone() {
+	b.Lock()
+	b.TurnDone = true
+	b.Unlock()
+}
+
+func (b *Board) UnlockTurnDone() {
+	b.Lock()
+	b.TurnDone = false
+	b.Unlock()
+}
+
 func (b *Board) PlayerCount() int {
 	b.Lock()
 	defer b.Unlock()
