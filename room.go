@@ -7,6 +7,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/gorilla/websocket"
 	jsoniter "github.com/json-iterator/go"
+	json "github.com/json-iterator/go"
 )
 
 type (
@@ -84,7 +85,7 @@ func (cr *Room) MessagePlayer(player string, message string) {
 
 func convertMessage(msg []byte, message *Message) error {
 	// Unmarshal the JSON into msgIntermediate
-	if err := jsoniter.Unmarshal(msg, message); err != nil {
+	if err := json.Unmarshal(msg, message); err != nil {
 		return fmt.Errorf("failed to unmarshal message: %w", err)
 	}
 
@@ -102,7 +103,7 @@ func convertMessage(msg []byte, message *Message) error {
 		if message.Body == nil {
 			return fmt.Errorf("body is required for trade action")
 		}
-		bodyBytes, err := jsoniter.Marshal(message.Body)
+		bodyBytes, err := json.Marshal(message.Body)
 		if err != nil {
 			return fmt.Errorf("failed to marshal body: %v", err)
 		}
@@ -110,7 +111,7 @@ func convertMessage(msg []byte, message *Message) error {
 		// Use bodyStr as needed
 
 		var gameTradeBody GameTradeBody
-		if err := jsoniter.Unmarshal([]byte(bodyStr), &gameTradeBody); err != nil {
+		if err := json.Unmarshal([]byte(bodyStr), &gameTradeBody); err != nil {
 			return fmt.Errorf("failed to unmarshal body into GameTradeBody: %w", err)
 		}
 
