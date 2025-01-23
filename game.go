@@ -46,11 +46,13 @@ type Board struct {
 type (
 	IdType        *int
 	GameTradeBody struct {
-		To   IdType       `json:"to" validate:"required"`
-		Id   IdType       `json:"id" validate:"required"` // `required` ensures this field must be present
-		From IdType       `json:"from" validate:"required"`
-		Give TradeDetails `json:"give,omitempty"`
-		Take TradeDetails `json:"take,omitempty"`
+		To     IdType       `json:"to" validate:"required"`
+		Id     IdType       `json:"id" validate:"required"` // `required` ensures this field must be present
+		From   IdType       `json:"from" validate:"required"`
+		Give   TradeDetails `json:"give,omitempty"`
+		Take   TradeDetails `json:"take,omitempty"`
+		Accept bool         `json:"accept,omitempty"`
+		Active bool         `json:"active,omitempty"`
 	}
 )
 
