@@ -201,6 +201,8 @@ func (b *Board) HandleTradeAccept(player *Player, tradeAcceptBody GameTradeAccep
 	if err := b.TransferProperty(responder, requester, trade.Take.Property...); err != nil {
 		return "", "", err
 	}
+	// 3. Transfer Cards
+	return "", "", nil
 }
 
 func (b *Board) HandleAction(player *Player, message Message) (string, string, error) {
@@ -211,7 +213,6 @@ func (b *Board) HandleAction(player *Player, message Message) (string, string, e
 	case ActionAcceptTrade:
 		// TODO:
 		// Validate and Accept Trade Do Transaction
-
 		return b.HandleTradeAccept(player, message.Body.(GameTradeAcceptBody))
 	case ActionForfeitGame:
 		// TODO:
