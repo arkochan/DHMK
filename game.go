@@ -193,6 +193,14 @@ func (b *Board) HandleTradeAccept(player *Player, tradeAcceptBody GameTradeAccep
 	if err := b.TransferPlayerToPlayer(responder, requester, trade.Take.Money); err != nil {
 		return "", "", err
 	}
+
+	// 2. Transfer Property
+	if err := b.TransferProperty(requester, responder, trade.Give.Property...); err != nil {
+		return "", "", err
+	}
+	if err := b.TransferProperty(responder, requester, trade.Take.Property...); err != nil {
+		return "", "", err
+	}
 }
 
 func (b *Board) HandleAction(player *Player, message Message) (string, string, error) {
