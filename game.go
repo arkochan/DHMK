@@ -19,7 +19,7 @@ const (
 type Slot struct {
 	Name   string
 	Type   Slottype
-	Owner  string
+	Owner  IdType
 	Price  int
 	Houses int
 	// appends slot here
@@ -69,17 +69,17 @@ func NewBoard() *Board {
 	// Create a simple board with properties
 
 	slots := []Slot{
-		{Name: "Mediterranean Avenue", Type: SlotTypeProperty, Owner: "", Price: 60, Houses: 0},
-		{Name: "Arkochan Avenue", Type: SlotTypeProperty, Owner: "", Price: 60, Houses: 0},
-		{Name: "Chittagong", Type: SlotTypeProperty, Owner: "", Price: 60, Houses: 0},
-		// {Name: "Community Chest", Type: SlotTypeCard, Owner: "", Price: 0, Houses: 0},
-		{Name: "Hell Yeah Avenue", Type: SlotTypeProperty, Owner: "", Price: 60, Houses: 0},
-		{Name: "Nicsu York", Type: SlotTypeProperty, Owner: "", Price: 60, Houses: 0},
-		{Name: "MiniSoda", Type: SlotTypeProperty, Owner: "", Price: 60, Houses: 0},
-		{Name: "Ohio", Type: SlotTypeProperty, Owner: "", Price: 60, Houses: 0},
-		// {Name: "Income Tax", Type: SlotTypeTax, Owner: "", Price: 0, Houses: 0},
-		// {Name: "Go to Jail", Type: SlotTypeJail, Owner: "", Price: 0, Houses: 0},
-		// {Name: "Free Parking", Type: SlotTypeNeutral, Owner: "", Price: 0, Houses: 0},
+		{Name: "Mediterranean Avenue", Type: SlotTypeProperty, Owner: nil, Price: 60, Houses: 0},
+		{Name: "Arkochan Avenue", Type: SlotTypeProperty, Owner: nil, Price: 60, Houses: 0},
+		{Name: "Chittagong", Type: SlotTypeProperty, Owner: nil, Price: 60, Houses: 0},
+		// {Name: "Community Chest", Type: SlotTypeCard, Owner: nil, Price: 0, Houses: 0},
+		{Name: "Hell Yeah Avenue", Type: SlotTypeProperty, Owner: nil, Price: 60, Houses: 0},
+		{Name: "Nicsu York", Type: SlotTypeProperty, Owner: nil, Price: 60, Houses: 0},
+		{Name: "MiniSoda", Type: SlotTypeProperty, Owner: nil, Price: 60, Houses: 0},
+		{Name: "Ohio", Type: SlotTypeProperty, Owner: nil, Price: 60, Houses: 0},
+		// {Name: "Income Tax", Type: SlotTypeTax, Owner: nil, Price: 0, Houses: 0},
+		// {Name: "Go to Jail", Type: SlotTypeJail, Owner: nil, Price: 0, Houses: 0},
+		// {Name: "Free Parking", Type: SlotTypeNeutral, Owner: nil, Price: 0, Houses: 0},
 	}
 	return &Board{
 		Slots:   slots,
@@ -208,6 +208,7 @@ func (b *Board) CheckTradeBody(tradeBody GameTradeBody) error {
 	return nil
 }
 
+
 // Trade Details checker
 func (b *Board) CheckTradeDetails(from *Player, tradeBody GameTradeBody) error {
 	to := b.GetPlayer(tradeBody.To)
@@ -251,7 +252,7 @@ func (b *Board) HandleTrade(from *Player, tradeBody GameTradeBody) (string, stri
 
 func (b *Board) BuyProperty(player *Player) (string, string, error) {
 	slot := b.Slots[player.Position]
-	if slot.Owner != "" {
+	if slot.Owner != nil {
 		return "", "", fmt.Errorf("slot already owned")
 	}
 	if player.Money < slot.Price {
@@ -260,7 +261,7 @@ func (b *Board) BuyProperty(player *Player) (string, string, error) {
 	// TODO:
 	// Create a transaction function
 	b.TransferPlayerToBank(player, slot.Price)
-	slot.Owner = player.Name
+	slot.Owner = player.Id
 	return fmt.Sprintf("%s bought %s for %d", player.Name, slot.Name, slot.Price), "", nil
 }
 
@@ -270,17 +271,17 @@ func (b *Board) MovePlayer(player *Player, steps int) (string, string, error) {
 
 	switch currentSlot.Type {
 	case SlotTypeProperty:
-		if currentSlot.Owner == "" && currentSlot.Price > 0 {
+		if currentSlot.Owner == nil && currentSlot.Price > 0 {
 			// prompt user
 			return "", fmt.Sprintf("Want to buy %s for %d?", currentSlot.Name, currentSlot.Price), nil
-		} else if currentSlot.Owner != "" && currentSlot.Owner != player.Name {
+		} else if currentSlot.Owner != nil && currentSlot.Owner != player.Id {
 			// Pay rent (simple calculation)
 			// TODO:
 			// proper rent calculation
 			rent := currentSlot.Price / 10
 
 			for _, p := range b.Players {
-				if p.Name == currentSlot.Owner {
+				if p.Id == currentSlot.Owner {
 					err := b.TransferPlayerToPlayer(player, p, rent)
 					if err != nil {
 						return "", "", err
