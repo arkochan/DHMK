@@ -225,8 +225,6 @@ func (b *Board) HandleAction(player *Player, message Message) (string, string, e
 	case ActionTrade:
 		return b.HandleTrade(player, message.Body.(GameTradeBody))
 	case ActionAcceptTrade:
-		// TODO:
-		// Validate and Accept Trade Do Transaction
 		return b.HandleTradeAccept(player, message.Body.(GameTradeAcceptBody))
 	case ActionForfeitGame:
 		// TODO:
@@ -337,8 +335,6 @@ func (b *Board) BuyProperty(player *Player) (string, string, error) {
 	if player.Money < slot.Price {
 		return "", "", fmt.Errorf("insufficient funds")
 	}
-	// TODO:
-	// Create a transaction function
 	b.TransferPlayerToBank(player, slot.Price)
 	slot.Owner = player.Id
 	return fmt.Sprintf("%s bought %s for %d", player.Name, slot.Name, slot.Price), "", nil
@@ -389,7 +385,6 @@ func (b *Board) RollPlayer(player *Player) (string, string, error) {
 	if player.MoveLocked {
 		return "", "", fmt.Errorf("cant move now")
 	}
-	// TODO:
 	return b.MovePlayer(player, steps)
 }
 
