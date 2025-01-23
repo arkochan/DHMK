@@ -28,12 +28,12 @@ type Slot struct {
 }
 
 type Player struct {
-	Id         IdType
-	Name       string
-	Money      int
-	Position   int
-	Inventory  []IdType
+	Id        IdType
+	Name      string
+	Money     int
+	Position  int
 	InJail    bool
+	Inventory []IdType
 }
 
 type Board struct {
@@ -43,7 +43,13 @@ type Board struct {
 	Trades  []*GameTradeBody
 	Turn    int
 	sync.Mutex
-	MoveLocked bool
+	// Turn Done to prevent player from ending turn without completing Turn Duties
+	// After completing a set of actions it unlocks and current players turn can end
+	// But still Go/ Move is locekd
+	// If player does end turn it unlocks MoveLock
+	TurnDone bool
+	// Move lock to prevent current player to Go multiple times
+	MoveLock bool
 }
 
 type IdType *int
@@ -126,11 +132,15 @@ func (b *Board) NextTurn() {
 
 // lock and unlock player movelock property
 func (b *Board) LockPlayerMove(player *Player) {
-	b.MoveLocked = true
+	b.Lock()
+	b.MoveLock = true
+	b.Unlock()
 }
 
 func (b *Board) UnlockPlayerMove(player *Player) {
-	b.MoveLocked = true
+	b.Lock()
+	b.MoveLock = true
+	b.Unlock()
 }
 
 func (b *Board) PlayerCount() int {
