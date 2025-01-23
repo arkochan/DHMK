@@ -28,6 +28,7 @@ type Slot struct {
 }
 
 type Player struct {
+	Id         IdType
 	Name       string
 	Money      int
 	Position   int
