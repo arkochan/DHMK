@@ -56,6 +56,9 @@ type (
 		Accept    bool         `json:"accept,omitempty"`
 		Active    bool         `json:"active,omitempty"`
 	}
+	GameTradeAcceptBody struct {
+		TradeId IdType `json:"tradeId" validate:"required"`
+	}
 )
 
 type TradeDetails struct {
