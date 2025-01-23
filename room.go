@@ -20,6 +20,7 @@ const (
 
 	ActionGo          Action = "go"
 	ActionTrade       Action = "trade"
+	ActionAcceptTrade Action = "acceptTrade"
 	ActionMessage     Action = "message"
 	ActionUseCard     Action = "useCard"
 	ActionForfeitGame Action = "forfeit"

@@ -165,8 +165,10 @@ func (b *Board) HandleAction(player *Player, message Message) (string, string, e
 	// if not players turn
 	switch message.Action {
 	case ActionTrade:
-		fmt.Println("Here")
 		return b.HandleTrade(player, message.Body.(GameTradeBody))
+	case ActionAcceptTrade:
+		// TODO:
+		// Validate and Accept Trade Do Transaction
 
 	case ActionForfeitGame:
 		// TODO:
