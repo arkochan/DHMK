@@ -203,6 +203,8 @@ func (b *Board) CheckTradeBody(tradeBody GameTradeBody) error {
 	return nil
 }
 
+
+// Trade Details checker
 func (b *Board) CheckTradeDetails(from *Player, tradeBody GameTradeBody) error {
 	to := b.GetPlayer(tradeBody.To)
 	fmt.Println("name" + to.Name)
@@ -212,9 +214,14 @@ func (b *Board) CheckTradeDetails(from *Player, tradeBody GameTradeBody) error {
 		fmt.Println("from id is not same")
 	}
 
-func (b *Board) HandleTrade(player *Player, tradeBody GameTradeBody) (string, string, error) {
-	fmt.Println(tradeBody)
-	return fmt.Sprintf("%s traded with %s", player.Name, tradeBody.To), "", nil
+	if tradeBody.Give.Money > from.Money || tradeBody.Take.Money > to.Money {
+		return fmt.Errorf("insufficient funds")
+	}
+
+	if tradeBody.Give.Money < 0 || tradeBody.Take.Money < 0 {
+		return fmt.Errorf("invalid amount")
+	}
+	return nil
 }
 
 func (b *Board) HandleTrade(from *Player, tradeBody GameTradeBody) (string, string, error) {
