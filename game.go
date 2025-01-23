@@ -190,8 +190,10 @@ func (b *Board) HandleAction(player *Player, message Message) (string, string, e
 
 		switch message.Action {
 		case ActionTrade:
+func (b *Board) GetPlayer(id IdType) *Player {
+	return b.Players[*id]
+}
 
-		case ActionForfeitGame:
 
 		default:
 			return "", "", fmt.Errorf("invalid action: %s", message.Action)
