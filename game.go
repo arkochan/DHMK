@@ -48,13 +48,13 @@ type IdType *int
 
 type (
 	GameTradeBody struct {
-		To     IdType       `json:"to" validate:"required"`
-		Id     IdType       `json:"id" validate:"required"` // `required` ensures this field must be present
-		From   IdType       `json:"from" validate:"required"`
-		Give   TradeDetails `json:"give,omitempty"`
-		Take   TradeDetails `json:"take,omitempty"`
-		Accept bool         `json:"accept,omitempty"`
-		Active bool         `json:"active,omitempty"`
+		Requester IdType       `json:"requster" validate:"required"`
+		Id        IdType       `json:"responder" validate:"required"` // `required` ensures this field must be present
+		Responder IdType       `json:"from" validate:"required"`
+		Give      TradeDetails `json:"give,omitempty"`
+		Take      TradeDetails `json:"take,omitempty"`
+		Accept    bool         `json:"accept,omitempty"`
+		Active    bool         `json:"active,omitempty"`
 	}
 )
 
@@ -206,7 +206,7 @@ func (b *Board) CheckTradeBody(tradeBody GameTradeBody) error {
 	if tradeBody.Id == nil {
 		return fmt.Errorf("missing trade id")
 	}
-	if tradeBody.To == nil || tradeBody.From == nil {
+	if tradeBody.Requester == nil || tradeBody.Responder == nil {
 		return fmt.Errorf("missing trade participant")
 	}
 	return nil
@@ -224,11 +224,11 @@ func (b *Board) isOwner(player *Player, propertyIds ...IdType) bool {
 
 // Trade Details checker
 func (b *Board) CheckTradeDetails(from *Player, tradeBody GameTradeBody) error {
-	to := b.GetPlayer(tradeBody.To)
+	to := b.GetPlayer(tradeBody.Requester)
 	fmt.Println("name" + to.Name)
 
 	// check if from id is same
-	if from.Id != tradeBody.From {
+	if from.Id != tradeBody.Responder {
 		fmt.Println("from id is not same")
 	}
 
