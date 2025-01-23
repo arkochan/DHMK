@@ -188,8 +188,6 @@ func (b *Board) HandleAction(player *Player, message Message) (string, string, e
 	return "", "", fmt.Errorf("error invalid action")
 }
 
-		switch message.Action {
-		case ActionTrade:
 func (b *Board) GetPlayer(id IdType) *Player {
 	return b.Players[*id]
 }
