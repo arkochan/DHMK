@@ -38,6 +38,7 @@ type Player struct {
 type Board struct {
 	Slots   []Slot
 	Players []*Player
+	Trades  []*GameTradeBody
 	Turn    int
 	sync.Mutex
 	MoveLocked bool
@@ -227,6 +228,13 @@ func (b *Board) CheckTradeDetails(from *Player, tradeBody GameTradeBody) error {
 	return nil
 }
 
+// Enlist Trade
+func (b *Board) EnlistTrade(tradeBody GameTradeBody) {
+	b.Lock()
+	b.Trades = append(b.Trades, &tradeBody)
+	b.Unlock()
+}
+
 func (b *Board) HandleTrade(from *Player, tradeBody GameTradeBody) (string, string, error) {
 	err := b.CheckTradeBody(tradeBody)
 	if err != nil {
@@ -237,9 +245,8 @@ func (b *Board) HandleTrade(from *Player, tradeBody GameTradeBody) (string, stri
 		return "", "", err
 	}
 
-	// TODO:
-	// Enlist_Trade Function
-	return "", "", nil
+	b.EnlistTrade(tradeBody)
+	return fmt.Sprintf("New trade Added, Id: %d", tradeBody.Id), "", nil
 }
 
 func (b *Board) BuyProperty(player *Player) (string, string, error) {
