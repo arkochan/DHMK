@@ -43,14 +43,16 @@ type Board struct {
 	MoveLocked bool
 }
 
-type IdType *int
-type GameTradeBody struct {
-	To   IdType       `json:"to" validate:"required"`
-	Id   IdType       `json:"id" validate:"required"` // `required` ensures this field must be present
-	From IdType       `json:"from" validate:"required"`
-	Give TradeDetails `json:"give,omitempty"`
-	Take TradeDetails `json:"take,omitempty"`
-}
+type (
+	IdType        *int
+	GameTradeBody struct {
+		To   IdType       `json:"to" validate:"required"`
+		Id   IdType       `json:"id" validate:"required"` // `required` ensures this field must be present
+		From IdType       `json:"from" validate:"required"`
+		Give TradeDetails `json:"give,omitempty"`
+		Take TradeDetails `json:"take,omitempty"`
+	}
+)
 
 type TradeDetails struct {
 	Property []string `json:"property,omitempty"`
@@ -203,7 +205,6 @@ func (b *Board) CheckTradeBody(tradeBody GameTradeBody) error {
 	return nil
 }
 
-
 // Trade Details checker
 func (b *Board) CheckTradeDetails(from *Player, tradeBody GameTradeBody) error {
 	to := b.GetPlayer(tradeBody.To)
@@ -225,7 +226,6 @@ func (b *Board) CheckTradeDetails(from *Player, tradeBody GameTradeBody) error {
 }
 
 func (b *Board) HandleTrade(from *Player, tradeBody GameTradeBody) (string, string, error) {
-	b.PrintPlayers()
 	err := b.CheckTradeBody(tradeBody)
 	if err != nil {
 		return "", "", err
