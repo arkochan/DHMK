@@ -90,7 +90,8 @@ func NewBoard() *Board {
 }
 
 func (b *Board) AddPlayer(name string) *Player {
-	player := &Player{Name: name, Money: 1500, Position: 0}
+	newId := len(b.Players)
+	player := &Player{Name: name, Money: 1500, Position: 0, Id: &newId}
 	b.Lock()
 	b.Players = append(b.Players, player)
 	b.Unlock()
