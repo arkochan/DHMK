@@ -155,25 +155,38 @@ func (b *Board) RollDice() int {
 }
 
 func (b *Board) HandleAction(player *Player, message Message) (string, string, error) {
-	// if players turn
-	if player.Name == b.CurrentPlayer().Name {
-		switch message.Action {
-		case ActionGo:
-			return b.RollPlayer(player)
-		case ActionBuy:
-			return b.BuyProperty(player)
-		case ActionEndTurn:
-			return b.EndTurn(player)
+	// if not players turn
+	switch message.Action {
+	case ActionTrade:
+		fmt.Println("Here")
+		return b.HandleTrade(player, message.Body.(GameTradeBody))
 
-			// TODO:
-			// case ActionMortgage:
-			// case ActionUseCard:
-			// case ActionBuyHouse:
-		default:
-			return "", "", fmt.Errorf("invalid action: %s", message.Action)
+	case ActionForfeitGame:
+		// TODO:
+		// remove player from game
+		return fmt.Sprintf("%s forfeited the game", player.Name), "", nil
+	default:
+		fmt.Println("Not Here")
+		// if players turn
+		if player.Name == b.CurrentPlayer().Name {
+			// action is allowed in player's own turn
+			switch message.Action {
+			case ActionGo:
+				return b.RollPlayer(player)
+			case ActionBuy:
+				return b.BuyProperty(player)
+			case ActionEndTurn:
+				return b.EndTurn(player)
+				// TODO:
+
+				// case ActionMortgage:
+				// case ActionUseCard:
+				// case ActionBuyHouse:
+			}
 		}
-	} else {
-		// if not players turn
+	}
+	return "", "", fmt.Errorf("error invalid action")
+}
 
 		switch message.Action {
 		case ActionTrade:
