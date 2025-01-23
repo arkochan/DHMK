@@ -32,8 +32,8 @@ type Player struct {
 	Name       string
 	Money      int
 	Position   int
-	MoveLocked bool
 	Inventory  []IdType
+	InJail    bool
 }
 
 type Board struct {
@@ -122,6 +122,15 @@ func (b *Board) NextTurn() {
 	b.Lock()
 	b.Turn = (b.Turn + 1) % len(b.Players)
 	b.Unlock()
+}
+
+// lock and unlock player movelock property
+func (b *Board) LockPlayerMove(player *Player) {
+	b.MoveLocked = true
+}
+
+func (b *Board) UnlockPlayerMove(player *Player) {
+	b.MoveLocked = true
 }
 
 func (b *Board) PlayerCount() int {
@@ -382,7 +391,7 @@ func (b *Board) RollPlayer(player *Player) (string, string, error) {
 	steps := b.RollDice()
 	// TODO:
 	// Handle Double
-	if player.MoveLocked {
+	if b.MoveLocked {
 		return "", "", fmt.Errorf("cant move now")
 	}
 	return b.MovePlayer(player, steps)
