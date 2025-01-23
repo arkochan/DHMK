@@ -164,6 +164,22 @@ func (b *Board) RollDice() int {
 	return rand.Intn(12) + 1
 }
 
+// TradeAcceptHandler
+func (b *Board) HandleTradeAccept(player *Player, tradeAcceptBody GameTradeAcceptBody) (string, string, error) {
+	trade := b.Trades[*tradeAcceptBody.TradeId]
+	requester := b.GetPlayer(trade.Requester)
+	responder := b.GetPlayer(trade.Responder)
+
+	// TODO:
+	// 1. Transfer Money
+	if err := b.TransferPlayerToPlayer(requester, responder, trade.Give.Money); err != nil {
+		return "", "", err
+	}
+	if err := b.TransferPlayerToPlayer(responder, requester, trade.Take.Money); err != nil {
+		return "", "", err
+	}
+}
+
 func (b *Board) HandleAction(player *Player, message Message) (string, string, error) {
 	// if not players turn
 	switch message.Action {
@@ -173,6 +189,7 @@ func (b *Board) HandleAction(player *Player, message Message) (string, string, e
 		// TODO:
 		// Validate and Accept Trade Do Transaction
 
+		return b.HandleTradeAccept(player, message.Body.(GameTradeAcceptBody))
 	case ActionForfeitGame:
 		// TODO:
 		// remove player from game
