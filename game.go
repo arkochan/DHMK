@@ -208,6 +208,15 @@ func (b *Board) CheckTradeBody(tradeBody GameTradeBody) error {
 	return nil
 }
 
+// check if player is the owner
+func (b *Board) isOwner(player *Player, propertyIds ...IdType) bool {
+	for _, i := range propertyIds {
+		if b.Slots[*i].Owner != player.Id {
+			return false
+		}
+	}
+	return true
+}
 
 // Trade Details checker
 func (b *Board) CheckTradeDetails(from *Player, tradeBody GameTradeBody) error {
