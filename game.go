@@ -194,9 +194,17 @@ func (b *Board) GetPlayer(id IdType) *Player {
 	return b.Players[*id]
 }
 
+// Check if trade body is valid
+func (b *Board) CheckTradeBody(tradeBody GameTradeBody) error {
+	if tradeBody.Id == nil {
+		return fmt.Errorf("missing trade id")
+	}
+	if tradeBody.To == nil || tradeBody.From == nil {
+		return fmt.Errorf("missing trade participant")
+	}
+	return nil
+}
 
-		default:
-			return "", "", fmt.Errorf("invalid action: %s", message.Action)
 
 		}
 	}
