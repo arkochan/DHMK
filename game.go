@@ -203,10 +203,14 @@ func (b *Board) CheckTradeBody(tradeBody GameTradeBody) error {
 	return nil
 }
 
+func (b *Board) CheckTradeDetails(from *Player, tradeBody GameTradeBody) error {
+	to := b.GetPlayer(tradeBody.To)
+	fmt.Println("name" + to.Name)
 
-		}
+	// check if from id is same
+	if from.Id != tradeBody.From {
+		fmt.Println("from id is not same")
 	}
-	return "", "", nil
 
 func (b *Board) HandleTrade(player *Player, tradeBody GameTradeBody) (string, string, error) {
 	fmt.Println(tradeBody)
