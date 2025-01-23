@@ -83,6 +83,20 @@ func (cr *Room) MessagePlayer(player string, message string) {
 	}
 }
 
+func getBodyStr(body interface{}) (string, error) {
+	if body == nil {
+		return "", fmt.Errorf("body is required for trade action")
+	}
+	bodyBytes, err := json.Marshal(body)
+	if err != nil {
+		return "", fmt.Errorf("failed to marshal body: %v", err)
+	}
+	bodyStr := string(bodyBytes)
+	// Use bodyStr as needed
+	//
+	return bodyStr, nil
+}
+
 func convertMessage(msg []byte, message *Message) error {
 	// Unmarshal the JSON into msgIntermediate
 	if err := json.Unmarshal(msg, message); err != nil {
@@ -100,15 +114,10 @@ func convertMessage(msg []byte, message *Message) error {
 	// for cases tht require body
 	switch message.Action {
 	case ActionTrade:
-		if message.Body == nil {
-			return fmt.Errorf("body is required for trade action")
-		}
-		bodyBytes, err := json.Marshal(message.Body)
+		bodyStr, err := getBodyStr(message.Body)
 		if err != nil {
-			return fmt.Errorf("failed to marshal body: %v", err)
+			return fmt.Errorf("failed to get body string: %w", err)
 		}
-		bodyStr := string(bodyBytes)
-		// Use bodyStr as needed
 
 		var gameTradeBody GameTradeBody
 		if err := json.Unmarshal([]byte(bodyStr), &gameTradeBody); err != nil {
