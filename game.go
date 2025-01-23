@@ -164,6 +164,21 @@ func (b *Board) RollDice() int {
 	return rand.Intn(12) + 1
 }
 
+// Transfer Properties
+func (b *Board) TransferProperty(sender *Player, receiver *Player, properties ...IdType) error {
+	b.Lock()
+	defer b.Unlock()
+	for _, property := range properties {
+		if b.Slots[*property].Owner != sender.Id {
+			return fmt.Errorf("not owner of property")
+		}
+	}
+	for _, property := range properties {
+		b.Slots[*property].Owner = receiver.Id
+	}
+	return nil
+}
+
 // TradeAcceptHandler
 func (b *Board) HandleTradeAccept(player *Player, tradeAcceptBody GameTradeAcceptBody) (string, string, error) {
 	trade := b.Trades[*tradeAcceptBody.TradeId]
