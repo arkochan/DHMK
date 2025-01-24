@@ -378,6 +378,30 @@ func (b *Board) BuyProperty(player *Player) (string, string, error) {
 	return fmt.Sprintf("%s bought %s for %d", player.Name, slot.Name, slot.Price), "", nil
 }
 
+// function to calculate rent
+func (b *Board) calculateRent(currentSlot Slot) int {
+	if currentSlot.Owner == nil {
+		return 0
+	}
+	if b.Players[*currentSlot.Owner].InJail {
+		return 0
+	}
+	switch currentSlot.State {
+	case 0:
+		return currentSlot.Rent1
+	case 1:
+		return currentSlot.Rent2
+	case 2:
+		return currentSlot.Rent3
+	case 3:
+		return currentSlot.Rent4
+	case 4:
+		return currentSlot.Rent5
+	default:
+		return -1
+	}
+}
+
 func (b *Board) MovePlayer(player *Player, steps int) (string, string, error) {
 	player.Position = (player.Position + steps) % len(b.Slots)
 	currentSlot := b.Slots[player.Position]
@@ -391,8 +415,8 @@ func (b *Board) MovePlayer(player *Player, steps int) (string, string, error) {
 			// Pay rent (simple calculation)
 			// TODO:
 			// proper rent calculation
-			rent := currentSlot.Price / 10
 
+			rent := b.calculateRent(currentSlot)
 			for _, p := range b.Players {
 				if p.Id == currentSlot.Owner {
 					err := b.TransferPlayerToPlayer(player, p, rent)
