@@ -17,11 +17,6 @@ const (
 )
 
 type Slot struct {
-	Name   string
-	Type   Slottype
-	Owner  IdType
-	Price  int
-	Houses int
 	Name  string
 	Type  Slottype
 	Owner IdType
@@ -96,14 +91,14 @@ func NewBoard() *Board {
 	// Create a simple board with properties
 
 	slots := []Slot{
-		{Name: "Mediterranean Avenue", Type: SlotTypeProperty, Owner: nil, Price: 60, Houses: 0},
-		{Name: "Arkochan Avenue", Type: SlotTypeProperty, Owner: nil, Price: 60, Houses: 0},
-		{Name: "Chittagong", Type: SlotTypeProperty, Owner: nil, Price: 60, Houses: 0},
+		{Name: "Mediterranean Avenue", Type: SlotTypeProperty, Owner: nil, Price: 60, State: 0},
+		{Name: "Arkochan Avenue", Type: SlotTypeProperty, Owner: nil, Price: 60, State: 0},
+		{Name: "Chittagong", Type: SlotTypeProperty, Owner: nil, Price: 60, State: 0},
 		// {Name: "Community Chest", Type: SlotTypeCard, Owner: nil, Price: 0, Houses: 0},
-		{Name: "Hell Yeah Avenue", Type: SlotTypeProperty, Owner: nil, Price: 60, Houses: 0},
-		{Name: "Nicsu York", Type: SlotTypeProperty, Owner: nil, Price: 60, Houses: 0},
-		{Name: "MiniSoda", Type: SlotTypeProperty, Owner: nil, Price: 60, Houses: 0},
-		{Name: "Ohio", Type: SlotTypeProperty, Owner: nil, Price: 60, Houses: 0},
+		{Name: "Hell Yeah Avenue", Type: SlotTypeProperty, Owner: nil, Price: 60, State: 0},
+		{Name: "Nicsu York", Type: SlotTypeProperty, Owner: nil, Price: 60, State: 0},
+		{Name: "MiniSoda", Type: SlotTypeProperty, Owner: nil, Price: 60, State: 0},
+		{Name: "Ohio", Type: SlotTypeProperty, Owner: nil, Price: 60, State: 0},
 		// {Name: "Income Tax", Type: SlotTypeTax, Owner: nil, Price: 0, Houses: 0},
 		// {Name: "Go to Jail", Type: SlotTypeJail, Owner: nil, Price: 0, Houses: 0},
 		// {Name: "Free Parking", Type: SlotTypeNeutral, Owner: nil, Price: 0, Houses: 0},
