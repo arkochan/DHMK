@@ -22,6 +22,16 @@ type Slot struct {
 	Owner  IdType
 	Price  int
 	Houses int
+	Name  string
+	Type  Slottype
+	Owner IdType
+	Price int
+	State int
+	Rent1 int
+	Rent2 int
+	Rent3 int
+	Rent4 int
+	Rent5 int
 	// appends slot here
 	// Slot is a slot
 	// slot is kind of like parent class
