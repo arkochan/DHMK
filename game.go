@@ -417,6 +417,7 @@ func (b *Board) MovePlayer(player *Player, steps int) (string, string, error) {
 			// proper rent calculation
 
 			rent := b.calculateRent(currentSlot)
+
 			for _, p := range b.Players {
 				if p.Id == currentSlot.Owner {
 					err := b.TransferPlayerToPlayer(player, p, rent)
@@ -445,7 +446,6 @@ func (b *Board) HandleGo(player *Player) (string, string, error) {
 		return "", "", fmt.Errorf("cant go now")
 	}
 	b.LockPlayerMove(player)
-
 	// Player moving shouldn't be unlocked after move
 	// Only after the player has finished his turn
 	// So End turn Should have checks
@@ -472,6 +472,17 @@ func (b *Board) HandleEndTurn(player *Player) (string, string, error) {
 	// 1. he hasnt moved
 	// 2. he hasnt bought/auctioned property
 	// 3. he hasnt paid rent / balance <0
+	// So UnlockTurnDone must be called form
+	// Either
+	// in jail and Complete Jail Prompt
+	// OR
+	// 1. No double
+	// AND
+	// 2. Moved to a slot
+	// AND
+	// 2. Bought Property
+	// OR
+	// 2. Paid Rent
 
 	if !b.TurnDone {
 		return "", "", fmt.Errorf("turn not done")
