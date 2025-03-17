@@ -502,10 +502,10 @@ func (b *Board) HandleJailSlot(player *Player, slot Slot) (string, string, error
 	return "", "", nil
 }
 
-// Placeholder function for handling tax slots
+// Function for handling tax slots
 func (b *Board) HandleTaxSlot(player *Player, slot Slot) (string, string, error) {
-	// TODO: Implement tax slot logic
-	return "", "", nil
+	player.Money -= slot.Price
+	return fmt.Sprintf("%s paid %d in taxes", player.Name, slot.Price), "", nil
 }
 
 // Placeholder function for handling neutral slots
