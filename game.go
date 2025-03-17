@@ -429,14 +429,13 @@ func (b *Board) MovePlayer(player *Player, steps int) (string, string, error) {
 			}
 		}
 	case SlotTypeCard:
-		// Handle card slot logic here
-		// return "", "", fmt.Errorf("%s", currentSlot.Type)
+		return b.HandleCardSlot(player, currentSlot)
 	case SlotTypeJail:
-		// Handle jail slot logic here
+		return b.HandleJailSlot(player, currentSlot)
 	case SlotTypeTax:
-		// Handle tax slot logic here
+		return b.HandleTaxSlot(player, currentSlot)
 	case SlotTypeNeutral:
-		// Handle neutral slot logic here
+		return b.HandleNeutralSlot(player, currentSlot)
 	}
 	return "", "", fmt.Errorf("invalid slot type: %s", currentSlot.Type)
 }
@@ -489,4 +488,28 @@ func (b *Board) HandleEndTurn(player *Player) (string, string, error) {
 	}
 	b.NextTurn()
 	return fmt.Sprintf("Waiting for %s to play", b.CurrentPlayer().Name), "", nil
+}
+
+// Placeholder function for handling card slots
+func (b *Board) HandleCardSlot(player *Player, slot Slot) (string, string, error) {
+	// TODO: Implement card slot logic
+	return "", "", nil
+}
+
+// Placeholder function for handling jail slots
+func (b *Board) HandleJailSlot(player *Player, slot Slot) (string, string, error) {
+	// TODO: Implement jail slot logic
+	return "", "", nil
+}
+
+// Placeholder function for handling tax slots
+func (b *Board) HandleTaxSlot(player *Player, slot Slot) (string, string, error) {
+	// TODO: Implement tax slot logic
+	return "", "", nil
+}
+
+// Placeholder function for handling neutral slots
+func (b *Board) HandleNeutralSlot(player *Player, slot Slot) (string, string, error) {
+	// TODO: Implement neutral slot logic
+	return "", "", nil
 }
