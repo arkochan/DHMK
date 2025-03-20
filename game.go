@@ -498,8 +498,22 @@ func (b *Board) HandleCardSlot(player *Player, slot Slot) (string, string, error
 
 // Placeholder function for handling jail slots
 func (b *Board) HandleJailSlot(player *Player, slot Slot) (string, string, error) {
-	// TODO: Implement jail slot logic
-	return "", "", nil
+	if player.InJail {
+		return fmt.Sprintf("%s is already in jail", player.Name), "", nil
+	}
+	player.InJail = true
+	player.Position = b.findJailSlotPosition()
+	return fmt.Sprintf("%s has been sent to jail", player.Name), "", nil
+}
+
+// Helper function to find the position of the jail slot
+func (b *Board) findJailSlotPosition() int {
+	for i, slot := range b.Slots {
+		if slot.Type == SlotTypeJail {
+			return i
+		}
+	}
+	return -1 // Return -1 if no jail slot is found
 }
 
 // Function for handling tax slots
