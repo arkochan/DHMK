@@ -144,7 +144,7 @@ func (b *Board) LockPlayerMove(player *Player) {
 
 func (b *Board) UnlockPlayerMove(player *Player) {
 	b.Lock()
-	b.MoveLock = true
+	b.MoveLock = false
 	b.Unlock()
 }
 
