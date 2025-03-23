@@ -199,13 +199,13 @@ func (b *Board) TransferPlayerToBank(sender *Player, amount int) error {
 	return nil
 }
 
-func (b *Board) TransferPlayerToPlayer(sender *Player, receiver *Player, amount int) error {
+func (b *Board) TransferPlayerToPlayer(sender *Player, receiver *Player, amount int) (error, func()) {
 	if sender.Money < amount {
-		return fmt.Errorf("insufficient funds")
+		return fmt.Errorf("insufficient funds"), nil
 	}
 	sender.Money -= amount
 	receiver.Money += amount
-	return nil
+	return nil, func() { b.TransferPlayerToPlayer(receiver, sender, amount) }
 }
 
 func (b *Board) RollDice() int {
@@ -217,6 +217,7 @@ func (b *Board) TransferProperty(sender *Player, receiver *Player, properties ..
 	b.Lock()
 	defer b.Unlock()
 	for _, property := range properties {
+		// PROBLEM: This will create problem as a serch function will be needed find out propertie's board position.
 		if b.Slots[*property].Owner != sender.Id {
 			return fmt.Errorf("not owner of property")
 		}
@@ -236,11 +237,16 @@ func (b *Board) HandleTradeAccept(player *Player, tradeAcceptBody GameTradeAccep
 	if player.Id != responder.Id {
 		return "", "", fmt.Errorf("not your trade")
 	}
-
-	if err := b.TransferPlayerToPlayer(requester, responder, trade.Give.Money); err != nil {
+	var reverts []func()
+	err, revert := b.TransferPlayerToPlayer(requester, responder, trade.Give.Money)
+	if err != nil {
 		return "", "", err
 	}
-	if err := b.TransferPlayerToPlayer(responder, requester, trade.Take.Money); err != nil {
+
+	reverts = append(reverts, revert)
+
+	err, revert = b.TransferPlayerToPlayer(responder, requester, trade.Take.Money)
+	if err != nil {
 		return "", "", err
 	}
 
@@ -420,7 +426,7 @@ func (b *Board) MovePlayer(player *Player, steps int) (string, string, error) {
 
 			for _, p := range b.Players {
 				if p.Id == currentSlot.Owner {
-					err := b.TransferPlayerToPlayer(player, p, rent)
+					err, _ := b.TransferPlayerToPlayer(player, p, rent)
 					if err != nil {
 						return "", "", err
 					}
