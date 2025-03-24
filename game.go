@@ -385,26 +385,26 @@ func (b *Board) BuyProperty(player *Player) (string, string, error) {
 }
 
 // function to calculate rent
-func (b *Board) calculateRent(currentSlot Slot) int {
+func (b *Board) calculateRent(currentSlot Slot) (int, error) {
 	if currentSlot.Owner == nil {
-		return 0
+		return 0, nil
 	}
 	if b.Players[*currentSlot.Owner].InJail {
-		return 0
+		return 0, nil
 	}
 	switch currentSlot.State {
 	case 0:
-		return currentSlot.Rent1
+		return currentSlot.Rent1, nil
 	case 1:
-		return currentSlot.Rent2
+		return currentSlot.Rent2, nil
 	case 2:
-		return currentSlot.Rent3
+		return currentSlot.Rent3, nil
 	case 3:
-		return currentSlot.Rent4
+		return currentSlot.Rent4, nil
 	case 4:
-		return currentSlot.Rent5
+		return currentSlot.Rent5, nil
 	default:
-		return -1
+		return -1, fmt.Errorf("invalid state")
 	}
 }
 
@@ -422,7 +422,8 @@ func (b *Board) MovePlayer(player *Player, steps int) (string, string, error) {
 			// TODO:
 			// proper rent calculation
 
-			rent := b.calculateRent(currentSlot)
+			rent, err := b.calculateRent(currentSlot)
+			return "", "", err
 
 			for _, p := range b.Players {
 				if p.Id == currentSlot.Owner {
