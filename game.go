@@ -423,6 +423,9 @@ func (b *Board) MovePlayer(player *Player, steps int) (string, string, error) {
 			// proper rent calculation
 
 			rent, err := b.calculateRent(currentSlot)
+			if err != nil {
+				return "", "", err
+			}
 			return "", "", err
 
 			for _, p := range b.Players {
