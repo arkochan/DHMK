@@ -245,8 +245,11 @@ func (b *Board) HandleTradeAccept(player *Player, tradeAcceptBody GameTradeAccep
 
 	reverts = append(reverts, revert)
 
-	err, revert = b.TransferPlayerToPlayer(responder, requester, trade.Take.Money)
+	err, _ = b.TransferPlayerToPlayer(responder, requester, trade.Take.Money)
 	if err != nil {
+		for _, r := range reverts {
+			r()
+		}
 		return "", "", err
 	}
 
