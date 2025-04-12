@@ -32,6 +32,44 @@ type Slot struct {
 	// slot is kind of like parent class
 }
 
+// RemovePlayer removes a player from the game
+func (b *Board) RemovePlayer(player *Player) (string, error) {
+	b.Lock()
+	defer b.Unlock()
+
+	// Find the index of the player to remove
+	var index int
+	var found bool
+	for i, p := range b.Players {
+		if p.Id == player.Id {
+			index = i
+			found = true
+			break
+		}
+	}
+
+	if !found {
+		return "", fmt.Errorf("player not found")
+	}
+
+	// Remove the player from the Players slice
+	b.Players = append(b.Players[:index], b.Players[index+1:]...)
+
+	// Handle properties owned by the player
+	for i := range b.Slots {
+		if b.Slots[i].Owner == player.Id {
+			b.Slots[i].Owner = nil
+		}
+	}
+
+	// Adjust the turn if necessary
+	if b.Turn >= len(b.Players) {
+		b.Turn = 0
+	}
+
+	return fmt.Sprintf("%s has been removed from the game", player.Name), nil
+}
+
 type Player struct {
 	Id        IdType
 	Name      string
@@ -257,6 +295,7 @@ func (b *Board) HandleTradeAccept(player *Player, tradeAcceptBody GameTradeAccep
 	if err := b.TransferProperty(requester, responder, trade.Give.Property...); err != nil {
 		return "", "", err
 	}
+
 	if err := b.TransferProperty(responder, requester, trade.Take.Property...); err != nil {
 		return "", "", err
 	}
@@ -273,9 +312,11 @@ func (b *Board) HandleAction(player *Player, message Message) (string, string, e
 	case ActionAcceptTrade:
 		return b.HandleTradeAccept(player, message.Body.(GameTradeAcceptBody))
 	case ActionForfeitGame:
-		// TODO:
-		// remove player from game
-		return fmt.Sprintf("%s forfeited the game", player.Name), "", nil
+		message, err := b.RemovePlayer(player)
+		if err != nil {
+			return "", "", err
+		}
+		return message, "", nil
 	default:
 		fmt.Println("Not Here")
 		// if players turn
