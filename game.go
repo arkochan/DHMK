@@ -76,6 +76,7 @@ type Player struct {
 	Money     int
 	Position  int
 	InJail    bool
+	JailTurns int
 	Inventory []IdType
 }
 
@@ -553,9 +554,16 @@ func (b *Board) HandleCardSlot(player *Player, slot Slot) (string, string, error
 // Placeholder function for handling jail slots
 func (b *Board) HandleJailSlot(player *Player, slot Slot) (string, string, error) {
 	if player.InJail {
-		return fmt.Sprintf("%s is already in jail", player.Name), "", nil
+		player.JailTurns++
+		if player.JailTurns >= 3 {
+			player.InJail = false
+			player.JailTurns = 0
+			return fmt.Sprintf("%s is released from jail after serving time", player.Name), "", nil
+		}
+		return fmt.Sprintf("%s is in jail for %d more turns", player.Name, 3-player.JailTurns), "", nil
 	}
 	player.InJail = true
+	player.JailTurns = 0
 	player.Position = b.findJailSlotPosition()
 	return fmt.Sprintf("%s has been sent to jail", player.Name), "", nil
 }
