@@ -471,7 +471,6 @@ func (b *Board) MovePlayer(player *Player, steps int) (string, string, error) {
 			if err != nil {
 				return "", "", err
 			}
-			return "", "", err
 
 			for _, p := range b.Players {
 				if p.Id == currentSlot.Owner {
