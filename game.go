@@ -585,7 +585,8 @@ func (b *Board) HandleTaxSlot(player *Player, slot Slot) (string, string, error)
 }
 
 // Placeholder function for handling neutral slots
+
 func (b *Board) HandleNeutralSlot(player *Player, slot Slot) (string, string, error) {
-	// TODO: Implement neutral slot logic
-	return "", "", nil
+	// Return a message indicating the player has landed on a neutral slot
+	return fmt.Sprintf("%s has landed on a neutral slot: %s", player.Name, slot.Name), "", nil
 }
