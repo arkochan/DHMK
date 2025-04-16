@@ -144,7 +144,15 @@ func NewBoard() *Board {
 		// {Name: "Free Parking", Type: SlotTypeNeutral, Owner: nil, Price: 0, Houses: 0},
 	}
 	cards := []Card{
-		{Name: "Jail Free Card", Description: "Get out of jail free card"},
+		{Name: "Jail Free Card", Description: "Get out of jail free card", Effect: func(p *Player, b *Board) (string, error) {
+			p.InJail = false
+			return fmt.Sprintf("%s used a Jail Free Card", p.Name), nil
+		}},
+		{Name: "Advance to Go", Description: "Advance to Go and collect $200", Effect: func(p *Player, b *Board) (string, error) {
+			p.Position = 0
+			b.TransferBankToPlayer(p, 200)
+			return fmt.Sprintf("%s advanced to Go and collected $200", p.Name), nil
+		}},
 	}
 	return &Board{
 		Slots:   slots,
