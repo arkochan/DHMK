@@ -122,6 +122,7 @@ type TradeDetails struct {
 type Card struct {
 	Name        string
 	Description string
+	Effect      func(*Player, *Board) (string, error)
 }
 
 // LOOC YREV
