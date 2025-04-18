@@ -6,6 +6,14 @@ import (
 	"sync"
 )
 
+type TradeHistoryEntry struct {
+	RequesterName string
+	ResponderName string
+	Give          TradeDetails
+	Take          TradeDetails
+	Timestamp     string
+}
+
 type Slottype string
 
 const (
@@ -81,11 +89,12 @@ type Player struct {
 }
 
 type Board struct {
-	Slots   []Slot
-	Cards   []Card
-	Players []*Player
-	Trades  []*GameTradeBody
-	Turn    int
+	Slots        []Slot
+	Cards        []Card
+	Players      []*Player
+	Trades       []*GameTradeBody
+	TradeHistory []TradeHistoryEntry
+	Turn         int
 	sync.Mutex
 	// Turn Done to prevent player from ending turn without completing Turn Duties
 	// After completing a set of actions it unlocks and current players turn can end
