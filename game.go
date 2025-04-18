@@ -590,7 +590,10 @@ func (b *Board) findJailSlotPosition() int {
 
 // Function for handling tax slots
 func (b *Board) HandleTaxSlot(player *Player, slot Slot) (string, string, error) {
-	player.Money -= slot.Price
+	err := b.TransferPlayerToBank(player, slot.Price)
+	if err != nil {
+		return "", "", err
+	}
 	return fmt.Sprintf("%s paid %d in taxes", player.Name, slot.Price), "", nil
 }
 
