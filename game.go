@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"math/rand"
 	"sync"
+	"time"
 )
 
 type TradeHistoryEntry struct {
@@ -416,8 +417,22 @@ func (b *Board) CheckTradeDetails(from *Player, tradeBody GameTradeBody) error {
 // Enlist Trade
 func (b *Board) EnlistTrade(tradeBody GameTradeBody) {
 	b.Lock()
+	defer b.Unlock()
+
+	// Add the trade to the list of trades
 	b.Trades = append(b.Trades, &tradeBody)
-	b.Unlock()
+
+	// Create a new trade history entry
+	tradeHistoryEntry := TradeHistoryEntry{
+		RequesterName: b.GetPlayer(tradeBody.Requester).Name,
+		ResponderName: b.GetPlayer(tradeBody.Responder).Name,
+		Give:          tradeBody.Give,
+		Take:          tradeBody.Take,
+		Timestamp:     time.Now().Format(time.RFC3339),
+	}
+
+	// Add the trade history entry to the trade history
+	b.TradeHistory = append(b.TradeHistory, tradeHistoryEntry)
 }
 
 func (b *Board) HandleTrade(from *Player, tradeBody GameTradeBody) (string, string, error) {
