@@ -526,14 +526,6 @@ func (b *Board) HandleGo(player *Player) (string, string, error) {
 	// TODO:
 	// Handle Double
 
-	if player.InJail {
-		// TODO: Jail double roll
-		// If in jail go should lead here
-		// Roll dice
-		// if double
-		// Out
-		return "", "", nil
-	}
 	return b.MovePlayer(player, steps)
 }
 
