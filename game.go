@@ -15,6 +15,35 @@ type TradeHistoryEntry struct {
 	Timestamp     string
 }
 
+// TransferCards transfers cards from one player to another
+func (b *Board) TransferCards(sender *Player, receiver *Player, cards ...IdType) error {
+	b.Lock()
+	defer b.Unlock()
+
+	for _, card := range cards {
+		// Check if the sender has the card
+		cardIndex := -1
+		for i, c := range sender.Inventory {
+			if c == card {
+				cardIndex = i
+				break
+			}
+		}
+
+		if cardIndex == -1 {
+			return fmt.Errorf("card not found in sender's inventory")
+		}
+
+		// Remove the card from the sender's inventory
+		sender.Inventory = append(sender.Inventory[:cardIndex], sender.Inventory[cardIndex+1:]...)
+
+		// Add the card to the receiver's inventory
+		receiver.Inventory = append(receiver.Inventory, card)
+	}
+
+	return nil
+}
+
 type Slottype string
 
 const (
@@ -320,7 +349,15 @@ func (b *Board) HandleTradeAccept(player *Player, tradeAcceptBody GameTradeAccep
 		return "", "", err
 	}
 
-	// TODO: 3. Transfer Cards
+	// Transfer Cards
+	if err := b.TransferCards(requester, responder, trade.Give.Cards...); err != nil {
+		return "", "", err
+	}
+
+	if err := b.TransferCards(responder, requester, trade.Take.Cards...); err != nil {
+		return "", "", err
+	}
+
 	return "", "", nil
 }
 
