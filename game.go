@@ -178,9 +178,6 @@ func NewBoard() *Board {
 		{Name: "Nicsu York", Type: SlotTypeProperty, Owner: nil, Price: 60, State: 0},
 		{Name: "MiniSoda", Type: SlotTypeProperty, Owner: nil, Price: 60, State: 0},
 		{Name: "Ohio", Type: SlotTypeProperty, Owner: nil, Price: 60, State: 0},
-		// {Name: "Income Tax", Type: SlotTypeTax, Owner: nil, Price: 0, Houses: 0},
-		// {Name: "Go to Jail", Type: SlotTypeJail, Owner: nil, Price: 0, Houses: 0},
-		// {Name: "Free Parking", Type: SlotTypeNeutral, Owner: nil, Price: 0, Houses: 0},
 	}
 	cards := []Card{
 		{Name: "Jail Free Card", Description: "Get out of jail free card", Effect: func(p *Player, b *Board) (string, error) {
