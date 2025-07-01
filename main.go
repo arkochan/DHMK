@@ -3,25 +3,26 @@ package main
 import (
 	"net/http"
 
-	"github.com/gin-gonic/gin"
-	"github.com/gorilla/websocket"
-)
+	"dhmk/room"
 
-// WebSocket upgrader
-var upgrader = websocket.Upgrader{
-	CheckOrigin: func(r *http.Request) bool {
-		return true
-	},
-}
+	"github.com/gin-gonic/gin"
+)
 
 func main() {
 	r := gin.Default()
-	Room := NewRoom()
 
-	go Room.Run()
+	r.GET("/ws/:roomKey", func(c *gin.Context) {
+		roomKey := c.Param("roomKey")
+		roomInstance := room.GetOrCreateRoom(roomKey)
+		roomInstance.HandleWebSocket(c)
+	})
 
-	r.GET("/ws", Room.HandleWebSocket)
 	r.LoadHTMLGlob("templates/*")
+	r.GET("/room/:roomKey", func(c *gin.Context) {
+		roomKey := c.Param("roomKey")
+		c.HTML(http.StatusOK, "index.html", gin.H{"roomKey": roomKey})
+	})
+
 	r.GET("/", func(c *gin.Context) {
 		c.HTML(http.StatusOK, "index.html", nil)
 	})
