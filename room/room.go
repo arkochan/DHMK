@@ -5,8 +5,10 @@ import (
 	"fmt"
 	"net/http"
 	"sync"
+	"time"
 
 	"dhmk/game"
+
 	"github.com/gin-gonic/gin"
 	"github.com/gorilla/websocket"
 	json "github.com/json-iterator/go"
@@ -276,4 +278,22 @@ func (cr *Room) HandleWebSocket(c *gin.Context) {
 			fmt.Println(fmt.Errorf("Category %s Not defined", message.Category))
 		}
 	}
+}
+
+// CreateRandomRoom generates a random room key, creates the room, and returns the key.
+func CreateRandomRoom() string {
+	const letters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
+	keyLen := 6
+	roomKeyBytes := make([]byte, keyLen)
+	for i := range roomKeyBytes {
+		roomKeyBytes[i] = letters[randInt(len(letters))]
+	}
+	roomKey := string(roomKeyBytes)
+	GetOrCreateRoom(roomKey)
+	return roomKey
+}
+
+// randInt returns a random int in [0, n)
+func randInt(n int) int {
+	return int(time.Now().UnixNano() % int64(n))
 }

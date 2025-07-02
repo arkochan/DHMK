@@ -27,5 +27,10 @@ func main() {
 		c.HTML(http.StatusOK, "index.html", nil)
 	})
 
+	r.GET("/newroom", func(c *gin.Context) {
+		roomKey := room.CreateRandomRoom()
+		c.JSON(http.StatusOK, gin.H{"roomKey": roomKey})
+	})
+
 	r.Run(":8080")
 }
